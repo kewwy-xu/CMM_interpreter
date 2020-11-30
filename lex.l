@@ -3,10 +3,10 @@
 #include<string.h>
 #include "yacc.tab.h"
 
-extern "C"//ÎªÁËÄÜ¹»ÔÚC++³ÌĞòÀïÃæµ÷ÓÃCº¯Êı£¬±ØĞë°ÑÃ¿Ò»¸öĞèÒªÊ¹ÓÃµÄCº¯Êı£¬ÆäÉùÃ÷¶¼°üÀ¨ÔÚextern "C"{}¿éÀïÃæ£¬ÕâÑùC++Á´½ÓÊ±²ÅÄÜ³É¹¦Á´½ÓËüÃÇ¡£extern "C"ÓÃÀ´ÔÚC++»·¾³ÏÂÉèÖÃCÁ´½ÓÀàĞÍ¡£
-{	//yacc.yÖĞÒ²ÓĞÀàËÆµÄÕâ¶Îextern "C"£¬¿ÉÒÔ°ÑËüÃÇºÏ²¢³ÉÒ»¶Î£¬·Åµ½¹²Í¬µÄÍ·ÎÄ¼şmain.hÖĞ
+extern "C"//ä¸ºäº†èƒ½å¤Ÿåœ¨C++ç¨‹åºé‡Œé¢è°ƒç”¨Cå‡½æ•°ï¼Œå¿…é¡»æŠŠæ¯ä¸€ä¸ªéœ€è¦ä½¿ç”¨çš„Cå‡½æ•°ï¼Œå…¶å£°æ˜éƒ½åŒ…æ‹¬åœ¨extern "C"{}å—é‡Œé¢ï¼Œè¿™æ ·C++é“¾æ¥æ—¶æ‰èƒ½æˆåŠŸé“¾æ¥å®ƒä»¬ã€‚extern "C"ç”¨æ¥åœ¨C++ç¯å¢ƒä¸‹è®¾ç½®Cé“¾æ¥ç±»å‹ã€‚
+{	//yacc.yä¸­ä¹Ÿæœ‰ç±»ä¼¼çš„è¿™æ®µextern "C"ï¼Œå¯ä»¥æŠŠå®ƒä»¬åˆå¹¶æˆä¸€æ®µï¼Œæ”¾åˆ°å…±åŒçš„å¤´æ–‡ä»¶main.hä¸­
 	int yywrap(void);
-	int yylex(void);//Õâ¸öÊÇlexÉú³ÉµÄ´Ê·¨·ÖÎöº¯Êı£¬yaccµÄyyparse()Àï»áµ÷ÓÃËü£¬Èç¹ûÕâÀï²»ÉùÃ÷£¬Éú³ÉµÄyacc.tab.cÔÚ±àÒëÊ±»áÕÒ²»µ½¸Ãº¯Êı
+	int yylex(void);//è¿™ä¸ªæ˜¯lexç”Ÿæˆçš„è¯æ³•åˆ†æå‡½æ•°ï¼Œyaccçš„yyparse()é‡Œä¼šè°ƒç”¨å®ƒï¼Œå¦‚æœè¿™é‡Œä¸å£°æ˜ï¼Œç”Ÿæˆçš„yacc.tab.cåœ¨ç¼–è¯‘æ—¶ä¼šæ‰¾ä¸åˆ°è¯¥å‡½æ•°
 }
 
 #define IF 1 
@@ -34,17 +34,17 @@ extern "C"//ÎªÁËÄÜ¹»ÔÚC++³ÌĞòÀïÃæµ÷ÓÃCº¯Êı£¬±ØĞë°ÑÃ¿Ò»¸öĞèÒªÊ¹ÓÃµÄCº¯Êı£¬ÆäÉùÃ÷¶
 #define GT 23 //>
 #define GET 24 //>=
 #define SEMI 25 //;
-#define ID 26 //±êÊ¶·û
+#define ID 26 //æ ‡è¯†ç¬¦
 #define DOT 27 //.
 #define RETURN 28 //return
-#define NUMBER 29 //ÕûÊıint
+#define NUMBER 29 //æ•´æ•°int
 #define LCOM 30 // /*
 #define RCOM 31 // */
-#define MAIN 32  //mainÈë¿Úº¯Êı
-#define DECIMAL 33  //ÊµÊıreal
+#define MAIN 32  //mainå…¥å£å‡½æ•°
+#define DECIMAL 33  //å®æ•°real
 #define BREAK 34
 #define CONTINUE 35
-int errornum=0;  //´íÎóidÊıÁ¿
+int errornum=0;  //é”™è¯¯idæ•°é‡
 int linenum = 1;
 %}
 
@@ -122,7 +122,7 @@ sgCommentbegin "//"
 %%
 int main()
 {
-  yyin=fopen("testin.c","r");
+  yyin=fopen("testin.txt","r");
   yyout=fopen("testout.txt","w");
   fprintf(yyout,"lexme  code  test\n");
   yylex();
