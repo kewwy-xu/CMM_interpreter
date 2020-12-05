@@ -37,41 +37,41 @@ extern "C"
 %%
 
 program:
-	stmt-sequence{}
+	stmt_sequence{}
 	;
-stmt-sequence:
-	statement ';'stmt-sequence{}
+stmt_sequence:
+	statement ';'stmt_sequence{}
 	| statement %prec N{}
 	| /* empty */
 	;
 statement:
-	if-stmt{}
-	| while-stmt{}
-	| assign-stmt{}
-	| read-stmt{}
-	| write-stmt{}
-	| declare-stmt{}
+	if_stmt{}
+	| while_stmt{}
+	| assign_stmt{}
+	| read_stmt{}
+	| write_stmt{}
+	| declare_stmt{}
 	;
-stmt-block:
-	 stmt-sequence  {}
+stmt_block:
+	 stmt_sequence  {}
 	;
-if-stmt:
-	IF '(' exp ')' THEN stmt-block {} %prec IFX
-	| IF '(' exp ')' THEN stmt-block ELSE stmt-block {}
+if_stmt:
+	IF '(' exp ')' THEN stmt_block {} %prec IFX
+	| IF '(' exp ')' THEN stmt_block ELSE stmt_block {}
 	;
-while-stmt:
-	WHILE '(' exp ')' stmt-block{}
+while_stmt:
+	WHILE '(' exp ')' stmt_block{}
 	;
-assign-stmt:
+assign_stmt:
 	variable '=' exp ';'{}
 	;
-read-stmt:
+read_stmt:
 	READ variable ';'{}
 	;
-write-stmt:
+write_stmt:
 	WRITE exp ';'{}
 	;
-declare-stmt:
+declare_stmt:
 	INT ID '=' exp{}
 	| INT ID {}
 	| INT ID '[' exp ']'{}
@@ -85,24 +85,24 @@ variable:
 	| ID'['exp']'{}
 	;
 exp:
-	addtive-exp logical-op addtive-exp {}
-	| addtive-exp {} %prec NLO
+	addtive_exp logical_op addtive_exp {}
+	| addtive_exp {} %prec NLO
 	;
-addtive-exp:
-	term add-op addtive-exp {}
+addtive_exp:
+	term add_op addtive_exp {}
 	| term {} %prec NAO
 	;
 term: 
-	factor mul-op term {}
+	factor mul_op term {}
 	| factor {} %prec NMO
 	;
 factor:
 	'(' exp ')' {}
 	| NUMBER {}
 	| variable {}
-	| add-op exp {}
+	| add_op exp {}
 	;
-logical-op:
+logical_op:
 	'>' {}
 	| '<' {}
 	| '>' '=' {}
@@ -110,11 +110,11 @@ logical-op:
 	| '<' '>' {}
 	| '=' '=' {}
 	;
-add-op:
+add_op:
 	'+' {}
 	| '-' {}
 	;
-mul-op:
+mul_op:
 	'*' {}
 	| '/' {}
 	;
@@ -134,14 +134,14 @@ int main()							//程序主函数，这个函数也可以放到其它.c, .cpp文件里
 	if(fp==NULL)
 	{
 		printf("cannot open %s\n", sFile);
-		return -1;
+		return _1;
 	}
 	extern FILE* yyin;				//yyin和yyout都是FILE*类型
 	yyin=fp;						//yacc会从yyin读取输入，yyin默认是标准输入，这里改为磁盘文件。yacc默认向yyout输出，可修改yyout改变输出目的
 
-	printf("-----begin parsing %s\n", sFile);
+	printf("_____begin parsing %s\n", sFile);
 	yyparse();						//使yacc开始读取输入和解析，它会调用lex的yylex()读取记号
-	puts("-----end parsing");
+	puts("_____end parsing");
 
 	fclose(fp);
 
