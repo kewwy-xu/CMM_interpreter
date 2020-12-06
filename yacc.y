@@ -1,59 +1,133 @@
 %{
-/*±¾yaccµÄÉú³ÉÎÄ¼þÊÇyacc.tab.cºÍyacc.tab.h
-yaccÎÄ¼þÓÉ3¶Î×é³É£¬ÓÃ2¸ö%%ÐÐ°ÑÕâ3¶Î¸ô¿ª¡£
-µÚ1¶ÎÊÇÉùÃ÷¶Î£¬°üÀ¨£º
-1-C´úÂë²¿·Ö£ºincludeÍ·ÎÄ¼þ¡¢º¯Êý¡¢ÀàÐÍµÈÉùÃ÷£¬ÕâÐ©ÉùÃ÷»áÔ­Ñù¿½µ½Éú³ÉµÄ.cÎÄ¼þÖÐ¡£
-2-¼ÇºÅÉùÃ÷£¬Èç%token
-3-ÀàÐÍÉùÃ÷£¬Èç%type
-µÚ2¶ÎÊÇ¹æÔò¶Î£¬ÊÇyaccÎÄ¼þµÄÖ÷Ìå£¬°üÀ¨Ã¿¸ö²úÉúÊ½ÊÇÈçºÎÆ¥ÅäµÄ£¬ÒÔ¼°Æ¥ÅäºóÒªÖ´ÐÐµÄC´úÂë¶¯×÷¡£
-µÚ3¶ÎÊÇCº¯Êý¶¨Òå¶Î£¬Èçyyerror()µÄ¶¨Òå£¬ÕâÐ©C´úÂë»áÔ­Ñù¿½µ½Éú³ÉµÄ.cÎÄ¼þÖÐ¡£¸Ã¶ÎÄÚÈÝ¿ÉÒÔÎª¿Õ*/
 
-//µÚ1¶Î£ºÉùÃ÷¶Î
-#include "main.h"	//lexºÍyaccÒª¹²ÓÃµÄÍ·ÎÄ¼þ£¬ÀïÃæ°üº¬ÁËÒ»Ð©Í·ÎÄ¼þ£¬ÖØ¶¨ÒåÁËYYSTYPE
-
-extern "C"			//ÎªÁËÄÜ¹»ÔÚC++³ÌÐòÀïÃæµ÷ÓÃCº¯Êý£¬±ØÐë°ÑÃ¿Ò»¸öÐèÒªÊ¹ÓÃµÄCº¯Êý£¬ÆäÉùÃ÷¶¼°üÀ¨ÔÚextern "C"{}¿éÀïÃæ£¬ÕâÑùC++Á´½ÓÊ±²ÅÄÜ³É¹¦Á´½ÓËüÃÇ¡£extern "C"ÓÃÀ´ÔÚC++»·¾³ÏÂÉèÖÃCÁ´½ÓÀàÐÍ¡£
-{					//lex.lÖÐÒ²ÓÐÀàËÆµÄÕâ¶Îextern "C"£¬¿ÉÒÔ°ÑËüÃÇºÏ²¢³ÉÒ»¶Î£¬·Åµ½¹²Í¬µÄÍ·ÎÄ¼þmain.hÖÐ
+#include "main.h"	
+#include "symbol_table.h"
+#include <string.h>
+extern "C"			
+{					
 	void yyerror(const char *s);
-	extern int yylex(void);//¸Ãº¯ÊýÊÇÔÚlex.yy.cÀï¶¨ÒåµÄ£¬yyparse()ÀïÒªµ÷ÓÃ¸Ãº¯Êý£¬ÎªÁËÄÜ±àÒëºÍÁ´½Ó£¬±ØÐëÓÃextern¼ÓÒÔÉùÃ÷
+	extern int yylex(void);
 }
 
 %}
 
-/*lexÀïÒªreturnµÄ¼ÇºÅµÄÉùÃ÷
-ÓÃtokenºó¼ÓÒ»¶Ô<member>À´¶¨Òå¼ÇºÅ£¬Ö¼ÔÚÓÃÓÚ¼ò»¯ÊéÐ´·½Ê½¡£
-¼Ù¶¨Ä³¸ö²úÉúÊ½ÖÐµÚ1¸öÖÕ½á·ûÊÇ¼ÇºÅOPERATOR£¬ÔòÒýÓÃOPERATORÊôÐÔµÄ·½Ê½£º
-1-Èç¹û¼ÇºÅOPERATORÊÇÒÔÆÕÍ¨·½Ê½¶¨ÒåµÄ£¬Èç%token OPERATOR£¬ÔòÔÚ¶¯×÷ÖÐÒªÐ´$1.m_cOp£¬ÒÔÖ¸Ã÷Ê¹ÓÃYYSTYPEµÄÄÄ¸ö³ÉÔ±
-2-ÓÃ%token<m_cOp>OPERATOR·½Ê½¶¨Òåºó£¬Ö»ÐèÒªÐ´$1£¬yacc»á×Ô¶¯Ìæ»»Îª$1.m_cOp
-ÁíÍâÓÃ<>¶¨Òå¼ÇºÅºó£¬·ÇÖÕ½á·ûÈçfile, tokenlist£¬±ØÐëÓÃ%type<member>À´¶¨Òå(·ñÔò»á±¨´í)£¬ÒÔÖ¸Ã÷ËüÃÇµÄÊôÐÔ¶ÔÓ¦YYSTYPEÖÐÄÄ¸ö³ÉÔ±£¬ÕâÊ±¶Ô¸Ã·ÇÖÕ½á·ûµÄÒýÓÃ£¬Èç$$£¬»á×Ô¶¯Ìæ»»Îª$$.member*/
-%token<m_nInt>INTEGER
-%token<m_sId>IDENTIFIER
-%token<m_cOp>OPERATOR
-%type<m_sId>file
-%type<m_sId>tokenlist
 
+
+%token INT
+%token REAL
+%token IF
+%token THEN
+%token ELSE
+%token WHILE
+%token READ
+%token WRITE
+%token BREAK
+%token CONTINUE
+%token <symp> ID
+%token <m_int> NUMBER
+%token <m_decimal> DECIMAL
+%token <m_ariop> ARIOP
+%token <m_relop> RELOP
+%token <m_spchar> SPCHAR
+
+
+%nonassoc NAO
+%left '+' '-'
+%nonassoc NMO
+%left '*' '/'
+
+%nonassoc IFX
+%nonassoc ELSE
+%nonassoc NLO
+%nonassoc '<' '=' '>'
+
+%nonassoc N
+%nonassoc ';'
 %%
 
-file:								//ÎÄ¼þ£¬ÓÉ¼ÇºÅÁ÷×é³É
-	tokenlist						//ÕâÀï½öÏÔÊ¾¼ÇºÅÁ÷ÖÐµÄID
-	{
-		cout<<"all id:"<<$1<<endl;	//$1ÊÇ·ÇÖÕ½á·ûtokenlistµÄÊôÐÔ£¬ÓÉÓÚ¸ÃÖÕ½á·ûÊÇÓÃ%type<m_sId>¶¨ÒåµÄ£¬¼´Ô¼¶¨¶ÔÆäÓÃYYSTYPEµÄm_sIdÊôÐÔ£¬$1Ïàµ±ÓÚ$1.m_sId£¬ÆäÖµÒÑ¾­ÔÚÏÂ²ã²úÉúÊ½ÖÐ¸³Öµ(tokenlist IDENTIFIER)
-	};
-tokenlist:							//¼ÇºÅÁ÷£¬»òÕßÎª¿Õ£¬»òÕßÓÉÈô¸ÉÊý×Ö¡¢±êÊ¶·û¡¢¼°ÆäËü·ûºÅ×é³É
-	{
-	}
-	| tokenlist INTEGER
-	{
-		cout<<"int: "<<$2<<endl;	//$2ÊÇ¼ÇºÅINTEGERµÄÊôÐÔ£¬ÓÉÓÚ¸Ã¼ÇºÅÊÇÓÃ%token<m_nInt>¶¨ÒåµÄ£¬¼´Ô¼¶¨¶ÔÆäÓÃYYSTYPEµÄm_nIntÊôÐÔ£¬$2»á±»Ìæ»»Îªyylval.m_nInt£¬ÒÑÔÚlexÀï¸³Öµ
-	}
-	| tokenlist IDENTIFIER
-	{
-		$$+=" " + $2;				//$$ÊÇ·ÇÖÕ½á·ûtokenlistµÄÊôÐÔ£¬ÓÉÓÚ¸ÃÖÕ½á·ûÊÇÓÃ%type<m_sId>¶¨ÒåµÄ£¬¼´Ô¼¶¨¶ÔÆäÓÃYYSTYPEµÄm_sIdÊôÐÔ£¬$$Ïàµ±ÓÚ$$.m_sId£¬ÕâÀï°ÑÊ¶±ðµ½µÄ±êÊ¶·û´®±£´æÔÚtokenlistÊôÐÔÖÐ£¬µ½ÉÏ²ã²úÉúÊ½Àï¿ÉÒÔÄÃ³öÎªÓÃ
-		cout<<"id: "<<$2<<endl;		//$2ÊÇ¼ÇºÅIDENTIFIERµÄÊôÐÔ£¬ÓÉÓÚ¸Ã¼ÇºÅÊÇÓÃ%token<m_sId>¶¨ÒåµÄ£¬¼´Ô¼¶¨¶ÔÆäÓÃYYSTYPEµÄm_sIdÊôÐÔ£¬$2»á±»Ìæ»»Îªyylval.m_sId£¬ÒÑÔÚlexÀï¸³Öµ
-	}
-	| tokenlist OPERATOR
-	{
-		cout<<"op: "<<$2<<endl;		//$2ÊÇ¼ÇºÅOPERATORµÄÊôÐÔ£¬ÓÉÓÚ¸Ã¼ÇºÅÊÇÓÃ%token<m_cOp>¶¨ÒåµÄ£¬¼´Ô¼¶¨¶ÔÆäÓÃYYSTYPEµÄm_cOpÊôÐÔ£¬$2»á±»Ìæ»»Îªyylval.m_cOp£¬ÒÑÔÚlexÀï¸³Öµ
-	};
+program:
+	stmt_sequence{}
+	;
+stmt_sequence:
+	statement ';'stmt_sequence{}
+	| statement %prec N{}
+	| /* empty */
+	;
+statement:
+	if_stmt{}
+	| while_stmt{}
+	| assign_stmt{}
+	| read_stmt{}
+	| write_stmt{}
+	| declare_stmt{}
+	;
+stmt_block:
+	 stmt_sequence  {}
+	;
+if_stmt:
+	IF '(' exp ')' THEN stmt_block {} %prec IFX
+	| IF '(' exp ')' THEN stmt_block ELSE stmt_block {}
+	;
+while_stmt:
+	WHILE '(' exp ')' stmt_block{}
+	;
+assign_stmt:
+	variable '=' exp ';'{}
+	;
+read_stmt:
+	READ variable ';'{}
+	;
+write_stmt:
+	WRITE exp ';'{}
+	;
+declare_stmt:
+	INT ID '=' exp{}
+	| INT ID {}
+	| INT ID '[' exp ']'{}
+	| REAL ID '=' exp {}
+	| REAL ID {}
+	| REAL ID '[' exp ']'{}
+	ID '=' exp {} 
+	;
+variable:
+	ID{}
+	| ID'['exp']'{}
+	;
+exp:
+	addtive_exp logical_op addtive_exp {}
+	| addtive_exp {} %prec NLO
+	;
+addtive_exp:
+	term add_op addtive_exp {}
+	| term {} %prec NAO
+	;
+term: 
+	factor mul_op term {}
+	| factor {} %prec NMO
+	;
+factor:
+	'(' exp ')' {}
+	| NUMBER {}
+	| variable {}
+	| add_op exp {}
+	;
+logical_op:
+	'>' {}
+	| '<' {}
+	| '>' '=' {}
+	| '<' '=' {}
+	| '<' '>' {}
+	| '=' '=' {}
+	;
+add_op:
+	'+' {}
+	| '-' {}
+	;
+mul_op:
+	'*' {}
+	| '/' {}
+	;
+
 
 %%
 
@@ -61,6 +135,8 @@ void yyerror(const char *s)			//µ±yaccÓöµ½Óï·¨´íÎóÊ±£¬»á»Øµ÷yyerrorº¯Êý£¬²¢ÇÒ°Ñ´
 {
 	cerr<<s<<endl;					//Ö±½ÓÊä³ö´íÎóÐÅÏ¢
 }
+
+
 
 int main()							//³ÌÐòÖ÷º¯Êý£¬Õâ¸öº¯ÊýÒ²¿ÉÒÔ·Åµ½ÆäËü.c, .cppÎÄ¼þÀï
 {
