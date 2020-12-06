@@ -59,10 +59,8 @@ sgCommentbegin "//"
 {number} {fprintf(yyout, "NUMBER %d %s\n", NUMBER, yytext); yylval.m_int=atoi(yytext);return NUMBER;}
 {decimal} {fprintf(yyout, "REAL %d %s\n", REAL, yytext); yylval.m_decimal=atof(yytext);return DECIMAL;}
 {id} { fprintf(yyout, "ID %d %s\n", ID, yytext); yylval.symp=symlook(yytext,lineno);return ID;}
-{ariop} {fprintf(yyout,"ARIOP, %s\n",yytext);yylval.m_ariop=yytext[0];return ARIOP;}
 {relop} {fprintf(yyout,"RELOP, %s\n",yytext);yylval.m_relop=yytext;return RELOP;}
-{spchar} {fprintf(yyout,"SPCHAR, %s\n",yytext);yylval.m_spchar=yytext[0];return SPCHAR;}
-. {fprintf(yyout,"error,行号%d %s\n",lineno,yytext);errornum++;return yytext[0];}
+. {fprintf(yyout,"%s\n",yytext);errornum++;return yytext[0];}
 %%
 /*
 int main()

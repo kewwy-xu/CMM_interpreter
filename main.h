@@ -18,8 +18,6 @@ struct Type//通常这里面每个成员，每次只会使用其中一个，一般是定义成union以节省空
 	int m_int;   //int类型的数字
 	double m_decimal;   //real类型的浮点值
 	string m_relop;  //关系运算符
-	char m_ariop;  //算术运算符
-	char m_spchar;  //界限符
 	struct symtab* symp;  //指向符号表条目的指针（存储变量id到符号表每一个条目）
 };
 

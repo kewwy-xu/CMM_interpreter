@@ -26,9 +26,8 @@ extern "C"
 %token <symp> ID
 %token <m_int> NUMBER
 %token <m_decimal> DECIMAL
-%token <m_ariop> ARIOP
 %token <m_relop> RELOP
-%token <m_spchar> SPCHAR
+
 
 %nonassoc NAO
 %left '+' '-'
