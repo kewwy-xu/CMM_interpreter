@@ -3,6 +3,7 @@
 #include "main.h"	
 #include "symbol_table.h"
 #include <string.h>
+
 extern "C"			
 {					
 	void yyerror(const char *s);
@@ -12,15 +13,14 @@ extern "C"
 %}
 
 
-
 %token INT
 %token REAL
 %token IF
-%token THEN
 %token ELSE
 %token WHILE
 %token READ
 %token WRITE
+%token THEN
 %token BREAK
 %token CONTINUE
 %token <symp> ID
@@ -29,7 +29,6 @@ extern "C"
 %token <m_ariop> ARIOP
 %token <m_relop> RELOP
 %token <m_spchar> SPCHAR
-
 
 %nonassoc NAO
 %left '+' '-'
@@ -145,14 +144,14 @@ int main()							//程序主函数，这个函数也可以放到其它.c, .cpp文件里
 	if(fp==NULL)
 	{
 		printf("cannot open %s\n", sFile);
-		return -1;
+		return _1;
 	}
 	extern FILE* yyin;				//yyin和yyout都是FILE*类型
 	yyin=fp;						//yacc会从yyin读取输入，yyin默认是标准输入，这里改为磁盘文件。yacc默认向yyout输出，可修改yyout改变输出目的
 
-	printf("-----begin parsing %s\n", sFile);
+	printf("_____begin parsing %s\n", sFile);
 	yyparse();						//使yacc开始读取输入和解析，它会调用lex的yylex()读取记号
-	puts("-----end parsing");
+	puts("_____end parsing");
 
 	fclose(fp);
 
