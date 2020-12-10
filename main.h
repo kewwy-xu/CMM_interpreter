@@ -5,7 +5,7 @@
 #include <iostream>//使用C++库
 #include <string>
 #include <stdio.h>//printf和FILE要用的
-#include "symbol_table.h"
+
 
 using namespace std;
 

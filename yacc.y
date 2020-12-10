@@ -1,9 +1,8 @@
 %{
 
 #include "main.h"	
-#include "symbol_table.h"
 #include <string.h>
-
+#include "symbol_table.h"
 extern "C"			
 {					
 	void yyerror(const char *s);
@@ -134,7 +133,25 @@ void yyerror(const char *s)			//µ±yaccÓöµ½Óï·¨´íÎóÊ±£¬»á»Øµ÷yyerrorº¯Êı£¬²¢ÇÒ°Ñ´
 	cerr<<s<<endl;					//Ö±½ÓÊä³ö´íÎóĞÅÏ¢
 }
 
-
+struct symtab* symlook(char* s, int lineno) {
+    char* p;
+    struct symtab* sp;
+    for (sp = symtab; sp < &symtab[NSYMS]; sp++) {
+        //ÒÑ¾­ÔÚ·ûºÅ±íÖĞ,strcmp()±È½Ï×Ö·û´®,ÏàµÈ·µ»Ø0
+        if (sp == symtab && !strcmp(sp->name, s))
+            return sp;
+        //²»´æÔÚ¸Ã±äÁ¿£¬Ôò²åÈë
+        if (!sp->name) {
+            //strdup()·µ»Ø×Ö·û´®µÄÓÀ¾Ã¿½±´£¬·ÀÖ¹±»ºóĞø±äÁ¿Ãû¸²¸Ç
+            sp->name = strdup(s);
+            sp->lineno = lineno;
+            return sp;
+        }
+        //·ñÔò¼ÌĞøËÑË÷ÏÂÒ»¸öÌõÄ¿
+    }
+    yyerror("³¬³ö·ûºÅ±íÌõÄ¿ÊıÁ¿ÏŞÖÆ");
+    exit(1);
+}
 
 int main()							//³ÌĞòÖ÷º¯Êı£¬Õâ¸öº¯ÊıÒ²¿ÉÒÔ·Åµ½ÆäËü.c, .cppÎÄ¼şÀï
 {
@@ -143,7 +160,7 @@ int main()							//³ÌĞòÖ÷º¯Êı£¬Õâ¸öº¯ÊıÒ²¿ÉÒÔ·Åµ½ÆäËü.c, .cppÎÄ¼şÀï
 	if(fp==NULL)
 	{
 		printf("cannot open %s\n", sFile);
-		return _1;
+		return 1;
 	}
 	extern FILE* yyin;				//yyinºÍyyout¶¼ÊÇFILE*ÀàĞÍ
 	yyin=fp;						//yacc»á´Óyyin¶ÁÈ¡ÊäÈë£¬yyinÄ¬ÈÏÊÇ±ê×¼ÊäÈë£¬ÕâÀï¸ÄÎª´ÅÅÌÎÄ¼ş¡£yaccÄ¬ÈÏÏòyyoutÊä³ö£¬¿ÉĞŞ¸Äyyout¸Ä±äÊä³öÄ¿µÄ
