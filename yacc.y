@@ -62,11 +62,11 @@ stmt_block:
 	 stmt_sequence  {}
 	;
 if_stmt:
-	IF '(' exp ')' THEN stmt_block {} %prec IFX
-	| IF '(' exp ')' THEN stmt_block ELSE stmt_block {}
+	IF '(' exp ')' '{' stmt_block '}' {} %prec IFX
+	| IF '(' exp ')' '{' stmt_block '}' ELSE '{' stmt_block '}' {}
 	;
 while_stmt:
-	WHILE '(' exp ')' stmt_block{}
+	WHILE '(' exp ')' '{' stmt_block '}' {}
 	;
 assign_stmt:
 	variable '=' exp ';'{}
